@@ -2,31 +2,31 @@
 
 **A MuJoCo-based humanoid robot simulation demonstrating an apple being tossed from one hand to the other using projectile motion, inverse kinematics, and robotic arm control.**
 
-## Project Overview
+## 1. Project Overview
 
 This project simulates a Unitree G1 humanoid robot repeatedly tossing an apple between its left and right hands.
 
-The simulation combines projectile-motion calculations with robotic arm control. The throwing arm plans the release velocity, while the catching arm predicts the apple's landing position and moves to intercept it.
+The throwing arm calculates the required release velocity using projectile-motion equations, while the catching arm predicts the apple's landing position and moves to intercept it.
 
-The project uses the MuJoCo physics engine to simulate robot dynamics, apple motion, contacts, and catching.
+The simulation uses the MuJoCo physics engine to model robot dynamics, apple motion, contacts, and catching.
 
-## Demo Video
+## 2. Demo Video
 
-The following video demonstrates 12 consecutive apple tosses:
+The following video demonstrates 12 consecutive apple tosses made using the project code.
 
 [Watch the Apple Toss Demo](apple_toss_demo.mp4)
 
-## Key Features
+## 3. Key Features
 
-- **Projectile Motion Planning:** Calculates the required apple release velocity to reach the opposite hand.
-- **Inverse Kinematics:** Controls the robot's seven-joint arms to follow the desired hand trajectories.
-- **Physics Simulation:** Simulates the robot and apple using MuJoCo.
+- **Projectile Motion Planning:** Calculates the release velocity required to reach the opposite hand.
+- **Inverse Kinematics:** Controls the robot's seven-joint arms to follow desired hand trajectories.
+- **Physics Simulation:** Uses MuJoCo to simulate the robot and apple.
 - **Predictive Catching:** Estimates the apple's landing position using its measured position and velocity.
 - **Iterative Learning Control:** Uses previous throwing errors to improve subsequent throws.
-- **Visualization:** Displays the predicted trajectory, actual flight path, predicted catch point, and apple velocity.
+- **Trajectory Visualization:** Displays the predicted parabola, actual flight path, predicted catch point, and apple velocity.
 - **Data Logging:** Records information about each toss in a CSV file.
 
-## How the Simulation Works
+## 4. How the Simulation Works
 
 Each toss follows five main stages:
 
@@ -36,7 +36,7 @@ Each toss follows five main stages:
 4. **Catch:** The opposite arm predicts the landing position and moves to intercept the apple.
 5. **Learn:** The difference between the planned and achieved release velocity is used to improve the next throw.
 
-## Physics and Mathematical Concepts
+## 5. Physics and Mathematical Concepts
 
 The project applies the principles of projectile motion.
 
@@ -48,11 +48,17 @@ The required release velocity is calculated using:
 +\frac{gT}{2}\hat{\mathbf{z}}
 \]
 
-The apple's flight is governed by gravitational acceleration.
+Where:
+
+- \(\mathbf{v}_0\) = required release velocity
+- \(\mathbf{p}_{target}\) = target position
+- \(\mathbf{p}_{release}\) = apple release position
+- \(T\) = desired time of flight
+- \(g\) = gravitational acceleration
 
 The simulation compares the analytically predicted trajectory with the trajectory produced by the physics engine.
 
-## Software and Technologies
+## 6. Software and Technologies
 
 - Python 3.9 or newer
 - MuJoCo
@@ -63,7 +69,7 @@ The simulation compares the analytically predicted trajectory with the trajector
 - Pillow
 - XML model and scene descriptions
 
-## Project Files
+## 7. Project Files
 
 | File | Description |
 |---|---|
@@ -73,13 +79,13 @@ The simulation compares the analytically predicted trajectory with the trajector
 | `run_apple_toss.bat` | Windows launcher |
 | `apple_toss_demo.mp4` | Recorded simulation demonstration |
 | `toss_analysis.png` | Graphical analysis of the simulation |
-| `toss_log.csv` | Recorded numerical results for each toss |
+| `toss_log.csv` | Numerical results recorded for each toss |
 | `README.txt` | Original project instructions |
 | `LICENSE` | License file |
 
-**Robot model assets:** The original project instructions specify a `g1/` directory containing the Unitree G1 model and mesh assets from MuJoCo Menagerie. These assets must also be available in the expected location for the simulation to run correctly.
+**Robot model assets:** The original project instructions specify a `g1/` directory containing the Unitree G1 model and mesh assets from MuJoCo Menagerie. These assets must be available in the expected location for the simulation to run correctly.
 
-## Installation and Setup
+## 8. Installation and Setup
 
 ### Requirements
 
@@ -112,7 +118,7 @@ To record a simulation video:
 python apple_toss.py --record my_video.mp4 --tosses 12
 ```
 
-## Simulation Results
+## 9. Simulation Results
 
 The supplied demonstration contains 12 consecutive tosses, all successfully caught.
 
@@ -123,11 +129,22 @@ The recorded run reports:
 - Agreement between measured and predicted flight time: approximately 2 ms
 - Agreement between measured and predicted apex height: approximately 2 mm
 
-The numerical results are also available in `toss_log.csv`, and the graphical analysis is available in `toss_analysis.png`.
+The numerical results are available in `toss_log.csv`.
 
-## Physical Modelling and Simplifications
+### Toss Analysis
 
-The simulation includes rigid-body dynamics, torque-limited arm servos, apple motion under gravity, and catching as an interception problem.
+The following graph shows the simulated flight paths, deviation from the analytical projectile trajectory, and landing error across tosses.
+
+![Toss Analysis](toss_analysis.png)
+
+## 10. Physical Modelling and Simplifications
+
+The simulation includes:
+
+- Rigid-body dynamics of the robot.
+- Torque-limited joint servos on the arms.
+- Apple motion under gravity.
+- Contacts and catching as an interception problem.
 
 Some elements are simplified:
 
@@ -136,7 +153,7 @@ Some elements are simplified:
 
 These assumptions are important when interpreting the simulation results.
 
-## Conclusion
+## 11. Conclusion
 
 The Unitree G1 Apple Toss Simulation demonstrates how projectile-motion equations, inverse kinematics, robotic control, and physics simulation can be combined to achieve a repeated hand-to-hand tossing and catching task.
 
