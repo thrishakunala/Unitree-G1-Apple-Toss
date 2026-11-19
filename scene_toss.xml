@@ -1,0 +1,42 @@
+<mujoco model="G1 apple toss">
+  <include file="g1/g1_with_hands.xml"/>
+  <compiler meshdir="g1/assets"/>
+  <option timestep="0.002" cone="elliptic" impratio="10"/>
+  <statistic center="0.15 0 0.95" extent="1.3"/>
+  <visual>
+    <headlight diffuse="0.55 0.55 0.55" ambient="0.25 0.25 0.25" specular="0.2 0.2 0.2"/>
+    <rgba haze="0.10 0.13 0.22 1"/>
+    <global azimuth="155" elevation="-12" offwidth="1920" offheight="1080"/>
+    <quality shadowsize="4096"/>
+    <map znear="0.02"/>
+  </visual>
+  <asset>
+    <texture type="skybox" builtin="gradient" rgb1="0.10 0.14 0.26" rgb2="0.02 0.03 0.07" width="512" height="3072"/>
+    <texture type="2d" name="grid" builtin="checker" mark="edge" rgb1="0.13 0.17 0.28" rgb2="0.10 0.13 0.22" markrgb="0.35 0.42 0.62" width="300" height="300"/>
+    <material name="grid" texture="grid" texuniform="true" texrepeat="4 4" reflectance="0.25"/>
+    <material name="apple_skin" rgba="0.80 0.10 0.12 1" specular="0.6" shininess="0.8"/>
+    <material name="apple_stem" rgba="0.30 0.20 0.10 1"/>
+    <material name="apple_leaf" rgba="0.25 0.60 0.20 1"/>
+  </asset>
+  <worldbody>
+    <light pos="1.5 -1 3.5" dir="-0.4 0.3 -1" directional="true" diffuse="0.6 0.6 0.6"/>
+    <light pos="0.4 0 2.2" dir="0 0 -1" diffuse="0.3 0.3 0.3" castshadow="false"/>
+    <geom name="floor" size="0 0 0.05" type="plane" material="grid"/>
+    <camera name="front" pos="1.75 0 1.12" xyaxes="0 1 0 -0.06 0 1" fovy="38"/>
+    <camera name="three_quarter" pos="1.45 -0.95 1.35" xyaxes="0.55 0.83 0 -0.18 0.12 1" fovy="40"/>
+    <body name="apple" pos="0.3 -0.2 1.2">
+      <freejoint name="apple_joint"/>
+      <geom name="apple" type="sphere" size="0.036" mass="0.15" material="apple_skin" friction="1.2 0.02 0.002" condim="4" solref="0.01 1.2" priority="2"/>
+      <geom type="cylinder" size="0.0025 0.008" pos="0 0 0.040" material="apple_stem" contype="0" conaffinity="0" mass="0"/>
+      <geom type="ellipsoid" size="0.012 0.006 0.0015" pos="0.011 0 0.046" euler="0 -0.5 0" material="apple_leaf" contype="0" conaffinity="0" mass="0"/>
+    </body>
+  </worldbody>
+  <equality>
+    <!-- Virtual support stand: holds the pelvis in place, like a lab gantry. -->
+    <weld name="support" body1="pelvis" solref="0.004 1"/>
+    <!-- Grasp model: a soft weld between palm and apple, switched on while a hand holds the apple
+         and off at the instant of release. The script sets the hold pose at run time. -->
+    <weld name="left_grasp" body1="left_wrist_yaw_link" body2="apple" active="false" solref="0.02 1" anchor="0 0 0" relpose="0.124 -0.048 0 1 0 0 0"/>
+    <weld name="right_grasp" body1="right_wrist_yaw_link" body2="apple" active="false" solref="0.02 1" anchor="0 0 0" relpose="0.124 0.048 0 1 0 0 0"/>
+  </equality>
+</mujoco>
